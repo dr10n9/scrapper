@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>lab2</title>
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="jumbotron">
+            <div class="container">
+                <div class="content">
+                    <h1 class="text-center">All topics list:</h1>
+                    <table class="table text-center">
+                        {% for topic in topics %}
+                        <tr>
+                            <td>
+                                    <a href="/topic?value={{topic}}">{{ topic }}</a>
+                                        </td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+
+
+                    <h1 class="text-center">All users list:</h1>
+                    <table class="table text-center">
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <a href="/user?value={{user}}">{{ user }}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <p class="text-center">Scraped from 
+            <a href="https://forums.drom.ru/">https://forums.drom.ru/</a>
+            </p>
+        </div>
+    </body>
+
+</html>

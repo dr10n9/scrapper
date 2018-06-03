@@ -12,7 +12,7 @@
         "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=32829"
     ],
     "keys": {
-        "posts" : "//div[@class='post_block']",
+        "posts" : "//div[@class='post_wrap']",
         "topic" : "//h1[@class='ipsType_pagetitle']/text()",
         "next_page_link" : "//a[@rel='next']/@href"
     },

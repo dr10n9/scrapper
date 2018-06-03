@@ -17,11 +17,13 @@ if(mongo_url == None):
     print('no db_url')
     sys.exit(0)
 
-print(mongo_url)
+#print(mongo_url)
 
 connection = pymongo.MongoClient(mongo_url)
+#print(connection)
 db = connection['sc_lab']
-
+print(db.collection_names())
+#print('database object', db)
 
 INPUT = 'input.json'
 
@@ -72,7 +74,7 @@ class Spider(scrapy.Spider):
 
     url_counter = 0
     current_page = 1
-    total = 0
+    total_counter = 0
 
 
     def start_requests(self):
@@ -86,23 +88,24 @@ class Spider(scrapy.Spider):
 
     def parse_forum(self, response):
         print('parse forum')
-        print(response)
+        #print(response)
         domain = self.response_get_domain(response)
-        print(domain)
+        #print(domain)
         links = response.xpath(self.thread_key).extract()
 
         for link in links:
             href = "{domain}{link}".format(domain=domain, link=link)
             href = href[4:]
-            print(href)
+            #print(href)
             yield scrapy.Request(url=href, callback=self.parse)
 
 
     def parse(self, response):
         print('parse')
-        print(response)
+        #print(response)
         try:
             posts = response.xpath(self.posts_key).extract()
+            print('posts len: ', len(posts))
         except:
             print('post scrap fail')
             return None
@@ -114,15 +117,18 @@ class Spider(scrapy.Spider):
             topic = 'unknown'
         print('2')
         for post in posts:
+            print('-----')
+            #print(post)
+            print('-----')
             self.url_counter += 1
             self.total_counter += 1
 
             comment = self.parse_post(post, topic)
-            print()
-            print(comment.to_string())
+            print(comment.author)
+            #print(comment.to_string())
             self.db_save_comment(comment)
 
-            if self.total >= self.max_counter:
+            if self.total_counter >= self.max_comments:
                 print('Completed')
                 sys.exit(0)
 
@@ -136,14 +142,16 @@ class Spider(scrapy.Spider):
 
     def parse_post(self, post, topic):
         print('parse_post')
-        print('url counter: ', self.url_counter)
+
         soup = BeautifulSoup(post, 'html.parser')
 
-        text = soup.findAll(self.post_text_element, {'class': self.post_text_class})
+        text = soup.findAll(self.post_text_element, {'itemprop': 'commentText'})
         """answer = soup.findAll(self.post_answer_element, {'class': self.post_answer_class})"""
         author = soup.findAll(self.post_author_element, {'class': self.post_author_class})
         date = soup.findAll(self.post_date_element, {'class': self.post_date_class})
-
+        #print('------------------------------------------------------------------------------')
+        #print('1)', text[0].text.strip(), '2)', author[0].text.strip(), '3)', date[0].text.strip())
+        #print('------------------------------------------------------------------------------')
         author = author[0].text
         text = text[0].text
         date = date[0].text
@@ -180,7 +188,7 @@ class Spider(scrapy.Spider):
             'topic' : comment.topic
         }
         print('SAVING')
-        return db.comments.update(data, data, upsert='True')
+        return db.comments.update(data, data, upsert=True)
 
 
     def response_get_domain(self, response):
