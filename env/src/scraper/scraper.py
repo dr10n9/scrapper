@@ -12,9 +12,9 @@ import json
 from pprint import pprint
 
 
-mongo_url = os.getenv('lab2_url', None)
+mongo_url = os.getenv('mongo_url', None)
 if(mongo_url == None):
-    print('no url')
+    print('no db_url')
     sys.exit(0)
 
 print(mongo_url)

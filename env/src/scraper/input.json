@@ -1,0 +1,39 @@
+{
+    "spider_name": "spider",
+    "comments_per_page": 20,
+    "max_comments": 1000,
+    "forum_urls": [
+        "http://roads.ru/forum/index.php?showforum=334"
+    ],
+    "concrete_urls": [
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=23477",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=33115",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=33952",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=32829"
+    ],
+    "keys": {
+        "posts" : "//div[@class='post_block']",
+        "topic" : "//h1[@class='ipsType_pagetitle']/text()",
+        "next_page_link" : "//a[@rel='next']/@href"
+    },
+    "post_keys": {
+        "text": {
+            "element": "div",
+            "class": "post entry-content"
+        },
+        "answer": {
+            "element": "div",
+            "class": "bbcode_container"
+        },
+        "author": {
+            "element": "span",
+            "class": "author vcard"
+        },
+        "date": {
+            "element": "abbr",
+            "class": "published"
+        }
+    },
+    "thread_key": "//a[@class='topic_title']@href"
+}
+
