@@ -1,40 +1,38 @@
 {
-	"spider_name": "transport forum spider",
-	"comments_per_page": 25,
-	"max_comments": 1000,
-	"forum_urls": [
-		"http://forum.transphoto.ru/"
-
-	],
+    "spider_name": "spider",
+    "comments_per_page": 20,
+    "max_comments": 1000,
+    "forum_urls": [
+        "http://roads.ru/forum/index.php?showforum=334"
+    ],
     "concrete_urls": [
-      "http://forum.transphoto.ru/viewforum.php?f=8&sid=f5a5285a045f34ea25b4169807a6ed24",
-        "http://forum.transphoto.ru/viewforum.php?f=9&sid=f5a5285a045f34ea25b4169807a6ed24",
-        "http://forum.transphoto.ru/viewforum.php?f=10&sid=f5a5285a045f34ea25b4169807a6ed24",
-        "http://forum.transphoto.ru/viewforum.php?f=22&sid=f5a5285a045f34ea25b4169807a6ed24",
-        "http://forum.transphoto.ru/viewforum.php?f=23&sid=f5a5285a045f34ea25b4169807a6ed24"
-	],
-	"keys": {
-		"posts" : "//li[@class='row bg2 sticky']/dt/div[@class='list-inner']/div[@class=topic-poster responsive-hide]",
-		"topic" : "//div[@class='page-body']/h2[@class='forum-title']/a/text()",
-		"next_page_link" : "//div[@class='pagination']/ul/li/a[@class='button']/@href"
-	},
-	"post_keys": {
-		"text": {
-			"element": "div",
-			"class": "content"
-		},
-		"answer": {
-			"element": "div",
-			"class": "bbcode_container"
-		},
-		"author": {
-			"element": "a",
-			"class": "username"
-		},
-		"date": {
-			"element": "p",
-			"class": "author"
-		}
-	},
-	"thread_key": "//h3[@class='threadtitle']/a/@href"
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=23477",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=33115",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=33952",
+        "http://roads.ru/forum/index.php?s=ea4f63c4799159b564e61b90da6297b6&showtopic=32829"
+    ],
+    "keys": {
+        "posts" : "//div[@class='post_block']",
+        "topic" : "//h1[@class='ipsType_pagetitle']/text()",
+        "next_page_link" : "//a[@rel='next']/@href"
+    },
+    "post_keys": {
+        "text": {
+            "element": "div",
+            "class": "post entry-content"
+        },
+        "answer": {
+            "element": "div",
+            "class": "bbcode_container"
+        },
+        "author": {
+            "element": "span",
+            "class": "author vcard"
+        },
+        "date": {
+            "element": "abbr",
+            "class": "published"
+        }
+    },
+    "thread_key": "//a[@class='topic_title']@href"
 }
