@@ -33,16 +33,16 @@ class Spider(scrapy.Spider):
 
     try:
         name = data['spider_name']
-        comment_per_page = data['comments_per_page']
+        comments_per_page = data['comments_per_page']
         max_comments = data['max_comments']
         posts_key = data['keys']['posts']
         topic_key = data['keys']['topic']
-        next_page_key = data['next_page_link']
+        next_page_key = data['keys']['next_page_link']
 
         post_text_element = data['post_keys']['text']['element']
         post_text_class = data['post_keys']['text']['class']
-        post_answer_element = data['post_keys']['answer']['element']
-        post_answer_class = data['post_keys']['answer']['class']
+        """post_answer_element = data['post_keys']['answer']['element']
+        post_answer_class = data['post_keys']['answer']['class']"""
         post_author_element = data['post_keys']['author']['element']
         post_author_class = data['post_keys']['author']['class']
         post_date_element = data['post_keys']['date']['element']
@@ -61,6 +61,7 @@ class Spider(scrapy.Spider):
 
     try:
        urls = data['concrete_urls']
+       print(urls)
 
     except:
        urls = None
@@ -75,6 +76,7 @@ class Spider(scrapy.Spider):
 
 
     def start_requests(self):
+        print('start requests')
         for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -83,32 +85,39 @@ class Spider(scrapy.Spider):
 
 
     def parse_forum(self, response):
+        print('parse forum')
+        print(response)
         domain = self.response_get_domain(response)
-        links = reponse.xpath(self.thread_key).extract()
+        print(domain)
+        links = response.xpath(self.thread_key).extract()
 
         for link in links:
             href = "{domain}{link}".format(domain=domain, link=link)
+            href = href[4:]
+            print(href)
             yield scrapy.Request(url=href, callback=self.parse)
 
 
     def parse(self, response):
+        print('parse')
+        print(response)
         try:
             posts = response.xpath(self.posts_key).extract()
         except:
             print('post scrap fail')
             return None
-
+        print('1')
         try:
             topic = response.xpath(self.topic_key).extract()
+            print(topic)
         except:
             topic = 'unknown'
-
+        print('2')
         for post in posts:
             self.url_counter += 1
             self.total_counter += 1
 
             comment = self.parse_post(post, topic)
-
             print()
             print(comment.to_string())
             self.db_save_comment(comment)
@@ -120,26 +129,29 @@ class Spider(scrapy.Spider):
             if self.url_counter >= self.comments_per_page:
                 self.url_counter = 0
                 link = self.get_next_page_link(response)
+                print('!!!!!!!!!!!!!!!!')
+                print(link)
                 return scrapy.Request(url=link, callback=self.parse)
 
 
     def parse_post(self, post, topic):
+        print('parse_post')
         print('url counter: ', self.url_counter)
         soup = BeautifulSoup(post, 'html.parser')
 
         text = soup.findAll(self.post_text_element, {'class': self.post_text_class})
-        answer = soup.findAll(self.post_answer_element, {'class': self.post_answer_class})
+        """answer = soup.findAll(self.post_answer_element, {'class': self.post_answer_class})"""
         author = soup.findAll(self.post_author_element, {'class': self.post_author_class})
         date = soup.findAll(self.post_date_element, {'class': self.post_date_class})
 
         author = author[0].text
         text = text[0].text
         date = date[0].text
-        try:
+        """try:
             to_delete = answer[0].text
             text = text[len(to_delete):]
         except:
-            print(None)
+            print(None)"""
 
         author = author.strip()
         text = text.strip()
@@ -148,13 +160,16 @@ class Spider(scrapy.Spider):
 
 
     def get_next_page_link(self, response):
-        domain = self.response_get_domain(response)
+        print('get_next_page_link')
+        """domain = self.response_get_domain(response)
         href = response.xpath(self.next_page_key).extract_first()
         if href == None:
             return None
 
         next_page_link = domain + href
-        return next_page_link
+        return next_page_link"""
+        href = response.xpath(self.next_page_key).extract_first()
+        return href
 
 
     def db_save_comment(self, comment):
@@ -164,14 +179,19 @@ class Spider(scrapy.Spider):
             'date' : comment.date,
             'topic' : comment.topic
         }
+        print('SAVING')
         return db.comments.update(data, data, upsert='True')
 
 
     def response_get_domain(self, response):
+        print('get domain')
+        print(response)
         href = str(response)
         href = href[4:]
         href = href[:-1]
         href = href.strip()
         parsed = urlparse(href)
         domain = '{uri.scheme}://{uri.netloc}'.format(uri=parsed)
-        return domain
+        print(domain)
+        print('finished')
+        return

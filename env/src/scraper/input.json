@@ -34,6 +34,6 @@
             "class": "published"
         }
     },
-    "thread_key": "//a[@class='topic_title']@href"
+    "thread_key": "//a[@class='topic_title']/@href"
 }
 
