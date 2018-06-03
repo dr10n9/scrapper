@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>lab 2</title>
+		<meta charset="UTF-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> 
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	</head>
+	
+	<body>
+		<div class="ct-chart ct-perfect-fourh"></div>
+		<div class="jumbotron">
+			
+			<div class="ml-1 px-2">
+				<button onclick="window.location.href='/'" type="button" class="btn btn-outline-dark">Back</button>
+			</div>
+			
+			<canvas id="myChart"></canvas>
+			<table class="table text-center">
+
+				<tr>
+					<th class="text-center">Author</th>
+					
+					<th class="text-center">Comments count</th>
+				</tr>
+				{% for i in range(counts|length) %}
+				<tr>
+					<td>
+						<a href="/user?value={{authors[i]}}">{{authors[i]}}</a>
+					</td>
+					
+						
+					<td>{{counts[i]}}</td>
+					</tr>
+					
+				{% endfor %}				
+			</table>
+			<h3 class="text-center">Total comments : {{total}}</h3>
+		</div>
+		
+
+		<script>
+			var authors = '{{ authors | tojson}}';
+			var counts = '{{ counts | tojson}}';
+			var total = '{{ total | tojson }}';
+			var topic = '{{ topic }}';
+			console.log("authors : ", authors);
+			console.log("counts : ", counts);
+			console.log("total : ", total);
+			console.log("topic : ", topic);
+			var authors = JSON.parse(authors);
+			var counts = JSON.parse(counts);
+			Chart.defaults.global.defaultFontFamily = 'Lato';
+			Chart.defaults.global.defaultFontSize = 18;
+			Chart.defaults.global.defaultFontColor = '#777';
+			let myChart = document.getElementById('myChart').getContext('2d'); 
+			let massPopChart = new Chart(myChart, {
+				type: 'bar',
+				data: {
+					labels: authors,
+					datasets: [{
+						data: counts,
+						label: 'comments',
+						borderWidth: 1,
+						borderColor: '#777',
+						hoverBorderWidth: 3,
+						hoverBorderColor: '#000'
+					}]
+				},
+				options: {
+					title: {
+						display: true,
+						text: topic,
+						fontSize: 20
+					},
+					layout: {
+						padding: {
+							left: 50,
+							right: 0,
+							bottom: 0,
+							top: 0
+						}
+					},
+					tooltips: {
+						enabled: true
+					}
+				}
+			});
+		</script>
+	</body>
+ 
+</html>
