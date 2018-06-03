@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<title>lab 2</title>
+		<meta charset="UTF-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> 
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	</head>
+	
+	<body>
+		<div class="ct-chart ct-perfect-fourh"></div>
+		
+		<div class="jumbotron">
+			
+			<div class="ml-1 px-2">
+				<button onclick="window.location.href='/'" type="button" class="btn btn-outline-dark">Back</button>
+			</div>
+
+			<canvas id="myChart"></canvas>
+
+			<table class="table text-center">
+				<tr>
+					<th>Total comments</th>
+					{% for topic in topics %}
+						<th>
+							<a href="/topic?value={{topic}}">{{topic}}</a>
+						</th>
+						
+					{% endfor %}
+				</tr>
+				<tr>
+					<td>{{coments_count}}</td>
+					{% for msg in messages_in_topics %}
+						<th>{{msg}}</th>
+					{% endfor %}
+				</tr>
+			</table>
+		</div>
+		
+		<script>
+			var coments_count = '{{ coments_count }}';
+			var total_comments = '{{ total_comments }}';
+			var topics = '{{ topics | tojson }}';
+			var messages_in_topics = '{{ messages_in_topics | tojson }}';
+			console.log("topics : ", topics);
+			console.log("messages_in_topics : ", messages_in_topics);
+			coments_count = parseInt(coments_count);
+			total_comments = parseInt(total_comments);
+			topics = JSON.parse(topics);
+			messages_in_topics = JSON.parse(messages_in_topics);
+			var username = '{{ username }}';
+			var total_text = "Total messages";
+			var username_text = username + "'s messages";
+			let myChart = document.getElementById('myChart').getContext('2d'); 
+			let massPopChart = new Chart(myChart, {
+				type: 'bar',
+				data: {
+					labels: topics,
+					datasets: [{
+						data: messages_in_topics,
+						label: 'comments',
+						borderWidth: 1,
+						borderColor: '#777',
+						hoverBorderWidth: 3,
+						hoverBorderColor: '#000'
+					}]
+				},
+				options: {
+					title: {
+						display: true,
+						text: username,
+						fontSize: 20
+					},
+					layout: {
+						padding: {
+							left: 50,
+							right: 0,
+							bottom: 0,
+							top: 0
+						}
+					},
+					tooltips: {
+						enabled: true
+					}
+				}
+			});
+		</script>
+	</body>
+ 
+</html>
