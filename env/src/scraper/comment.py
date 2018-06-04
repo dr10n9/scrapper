@@ -1,4 +1,5 @@
 class Comment():
+
     def __init__(self, author, text, date, topic):
         self.author = author
         self.text = text
