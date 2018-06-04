@@ -8,6 +8,37 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		<style>
+			 body {
+            background-color: #f2efda;
+            }
+
+            h1 {
+            color: maroon;
+            margin-left: 40px;
+            }
+
+            h2{
+            color: maroon;
+            margin-left: 40px;
+            }
+
+            a:link {
+            color: black
+            }
+
+            a:visited {
+            color: red
+            }
+
+            a:hover {
+            text-decoration: underline;
+            }
+
+            a:active {
+            text-decoration: underline;
+            }
+		</style>
 	</head>
 	
 	<body>
@@ -15,7 +46,7 @@
 		<div class="jumbotron">
 			
 			<div class="ml-1 px-2">
-				<button onclick="window.location.href='/'" type="button" class="btn btn-outline-dark">Back</button>
+				<button onclick="window.location.href='/'" type="button" class="btn btn-success ">Back</button>
 			</div>
 			
 			<canvas id="myChart"></canvas>
@@ -55,7 +86,7 @@
 			var counts = JSON.parse(counts);
 			Chart.defaults.global.defaultFontFamily = 'Lato';
 			Chart.defaults.global.defaultFontSize = 18;
-			Chart.defaults.global.defaultFontColor = '#777';
+			Chart.defaults.global.defaultFontColor = '#f46b41';
 			let myChart = document.getElementById('myChart').getContext('2d'); 
 			let massPopChart = new Chart(myChart, {
 				type: 'bar',
@@ -65,7 +96,7 @@
 						data: counts,
 						label: 'comments',
 						borderWidth: 1,
-						borderColor: '#777',
+						borderColor: '#a8bb19',
 						hoverBorderWidth: 3,
 						hoverBorderColor: '#000'
 					}]
