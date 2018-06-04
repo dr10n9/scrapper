@@ -1,32 +1,32 @@
-from flask import Flask, render_template, request
+from flask
+import Flask, render_template, request
 
 import numpy as np
 import pystache
 
 import pymongo
-from pymongo import MongoClient
+from pymongo
+import MongoClient
 import os
 import sys
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder = 'static', static_url_path = '')
 
 mongo_url = os.getenv('mongo_url', None)
 if (mongo_url == None):
     print('no url')
-    sys.exit(0)
+sys.exit(0)
 
 connection = pymongo.MongoClient(mongo_url)
 db = connection['sc_lab']
 
 USERS_COUNT = 10
 
-
 @app.route('/')
 def index():
     users = get_sorted_users()
-    topics = get_sorted_topics()
-    return render_template('index.html', users=users, topics=topics)
-
+topics = get_sorted_topics()
+return render_template('index.html', users = users, topics = topics)
 
 @app.route('/user', methods=['GET'])
 def search_user():
@@ -104,17 +104,20 @@ def get_comments_count_by_username(username):
     return comments_count
 
 
+
+
 def get_comments_count_by_topic(topic):
-    topics_count = db.comments.find({"topic": topic}).count()
-    return topics_count
+    topics_count = db.comments.find({
+        "topic": topic
+    }).count()
+return topics_count
 
 
 def get_comments_total_count():
     comments_count = db.comments.find().count()
-    return comments_count
+return comments_count
 
-
-def get_top_users_in_topic(topic, max_value=USERS_COUNT):
+def get_top_users_in_topic(topic, max_value = USERS_COUNT):
     comments = db.comments.aggregate(
         [
             {"$match": {"topic": topic}},
@@ -139,17 +142,17 @@ def get_top_users_in_topic(topic, max_value=USERS_COUNT):
         }
 
 
+
 def get_sorted_users():
     users = db.comments.distinct("author")
-    users.sort()
-    return users
-
+users.sort()
+return users
 
 def get_sorted_topics():
     topics = db.comments.distinct("topic")
-    topics.sort()
-    return topics
+topics.sort()
+return topics
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True)
